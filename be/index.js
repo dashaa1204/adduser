@@ -49,7 +49,11 @@ app.post("/add-user", (req, res) => {
     }
   });
   res.status(200);
-  res.send("User added successfully");
+  res.send("http://localhost:3001/users");
+});
+
+app.post("/delete", (req, res) => {
+  const deleteUser = req.body;
 });
 
 app.listen(3001, () => {

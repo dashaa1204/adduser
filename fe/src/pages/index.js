@@ -3,6 +3,7 @@ import { nanoid } from "nanoid";
 
 export default function Home() {
   const beUrl = "http://localhost:3001/add-user";
+  const delUrl = "http://localhost:3001/delete";
   const [data, setData] = useState();
 
   useEffect(() => {
@@ -15,14 +16,32 @@ export default function Home() {
     getData();
   }, []);
 
-  async function handleDelete(e) {
-    const fetchedData = await fetch("http://localhost:3001/delete");
-    data = { id };
-    const option = {
+  // async function handleDelete(e) {
+  //   const data = { id: e.target.id };
+  //   const option = {
+  //     method: "POST",
+  //     header: { "Content-Type": "application/json" },
+  //     body: JSON.stringify(data),
+  //   };
+  //   const fetchedData = await fetch(delUrl, option);
+  //   const fetchedJson = await fetchedData.text();
+  //   console.log("data", data);
+  // }
+
+  async function handleDel(e) {
+    const data = {
+      id: e,
+    };
+    console.log(data);
+    const options = {
       method: "POST",
-      header: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     };
+
+    const fetchedData = await fetch(delUrl, options);
+    const fetchedJson = await fetchedData.text();
+    console.log("success");
   }
 
   async function handleSubmit(e) {
@@ -60,11 +79,15 @@ export default function Home() {
         </div>
         {data?.map((a, index) => {
           return (
-            <div key={index} className="flex gap-[200px]">
+            <div key={index} className="flex justify-between">
               <p>{a.name}</p>
               <p>{a.age}</p>
-              <button>edit</button>
-              <button onClick={() => {}}>delete</button>
+              <div className="flex gap-2">
+                <button className="border p-2">edit</button>
+                <button className="border" onClick={handleDel(a.id)}>
+                  delete
+                </button>
+              </div>
             </div>
           );
         })}

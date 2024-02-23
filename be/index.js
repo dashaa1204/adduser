@@ -43,17 +43,34 @@ app.post("/add-user", (req, res) => {
           res.send("error happened");
         } else {
           console.log("success");
-          res.send("User added success");
+          res.status(200);
         }
       });
     }
   });
-  res.status(200);
-  res.send("http://localhost:3001/users");
 });
 
 app.post("/delete", (req, res) => {
   const deleteUser = req.body;
+  console.log("req body", deleteUser);
+  fs.readFile("dummy.json", (err, data) => {
+    if (err) {
+      console.log(err);
+    } else {
+      const jsonFile = JSON.parse(data.toString());
+      const result = jsonFile.users.filter((user) => user.id !== deleteUser.id);
+      console.log("json", result);
+      fs.writeFile("dummy.json", JSON.stringify(jsonFile), (err) => {
+        if (err) {
+          console.log(err);
+          res.send("error happened");
+        } else {
+          console.log("success");
+          res.send("user deleted");
+        }
+      });
+    }
+  });
 });
 
 app.listen(3001, () => {
